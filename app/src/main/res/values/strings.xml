@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CookPad</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="recipes_fragment">Recipes</string>
+    <string name="favourite_recipe_fragment">Favourites</string>
+    <string name="food_joke_fragment">Jokes</string>
+    <string name="vegan">Vegan</string>
+    <string name="vegan_leaf_image">Vegan Leaf Image</string>
+    <string name="likes_image">Likes image</string>
+    <string name="recipe_image">recipe image</string>
+</resources>
