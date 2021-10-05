@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aybarsacar.cookpadversion2.adapters.RecipesAdapter
 import com.aybarsacar.cookpadversion2.databinding.FragmentRecipesBinding
@@ -51,6 +52,11 @@ class RecipesFragment : Fragment() {
 
 //    _binding.lifecycleOwner = this
     _binding.mainViewModel = _mainViewModel
+
+
+    _binding.recipeFilterFab.setOnClickListener {
+      findNavController().navigate(RecipesFragmentDirections.actionRecipesFragmentToRecipesBottomSheet())
+    }
 
     // show the shimmer
     _binding.shimmerRecyclerView.showShimmer()

@@ -35,12 +35,12 @@
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/recipeFilterFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="24dp"
             android:clickable="true"
-            android:contentDescription="Float Action Button"
+            android:contentDescription="@string/recipe_filter_floatin_action_button"
             android:focusable="true"
             android:src="@drawable/ic_restaurant"
             app:layout_constraintBottom_toBottomOf="parent"
