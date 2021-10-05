@@ -54,6 +54,9 @@ class RecipesRowBinding {
         is ImageView -> {
           view.load(imageUrl) {
             crossfade(600)
+
+            // handle the error case - default image view when the images are not downloaded
+            error(R.drawable.ic_no_photos)
           }
         }
       }

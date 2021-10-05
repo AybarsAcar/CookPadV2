@@ -8,9 +8,13 @@ import javax.inject.Inject
  *
  */
 @ActivityRetainedScoped
-class Repository @Inject constructor(_remoteDataSource: RemoteDataSource) {
+class Repository @Inject constructor(
+  _remoteDataSource: RemoteDataSource,
+  _localDataSource: LocalDataSource
+) {
 
   // get a public variable to be accessed
   val remoteDataSource = _remoteDataSource
+  val localDataSource = _localDataSource
 
 }

@@ -4,13 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.aybarsacar.cookpadversion2.data.Repository
+import com.aybarsacar.cookpadversion2.data.database.RecipesEntity
 import com.aybarsacar.cookpadversion2.models.Result
 import com.aybarsacar.cookpadversion2.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -22,6 +22,18 @@ class MainViewModel @Inject constructor(
   application: Application
 ) : AndroidViewModel(application) {
 
+  // Room Database
+  var readRecipes: LiveData<List<RecipesEntity>> = _repository.localDataSource.readDatabase().asLiveData()
+
+  /**
+   * used to cache the recipes in the local sqlite database
+   */
+  private fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch(Dispatchers.IO) {
+    _repository.localDataSource.insertRecipes(recipesEntity)
+  }
+
+
+  // Retrofit
   var recipesResponse: MutableLiveData<NetworkResult<Result>> = MutableLiveData()
 
 
@@ -46,6 +58,13 @@ class MainViewModel @Inject constructor(
         // store the response in our live data
         recipesResponse.value = handleFoodRecipesResponse(response)
 
+        val foodRecipe = recipesResponse.value!!.data
+        if (foodRecipe != null) {
+
+          // cache the data
+          offlineCacheRecipes(foodRecipe)
+        }
+
       } catch (e: Exception) {
 
         recipesResponse.value = NetworkResult.Error("Recipes not found")
@@ -55,6 +74,18 @@ class MainViewModel @Inject constructor(
     } else {
       recipesResponse.value = NetworkResult.Error("No Internet Connection")
     }
+  }
+
+
+  /**
+   * Caches the result we get from the API
+   */
+  private fun offlineCacheRecipes(foodRecipe: Result) {
+
+    val recipesEntity = RecipesEntity(foodRecipe)
+
+    insertRecipes(recipesEntity)
+
   }
 
 

@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aybarsacar.cookpadversion2.adapters.RecipesAdapter
 import com.aybarsacar.cookpadversion2.databinding.FragmentRecipesBinding
 import com.aybarsacar.cookpadversion2.utils.NetworkResult
+import com.aybarsacar.cookpadversion2.utils.observeOnce
 import com.aybarsacar.cookpadversion2.viewmodels.MainViewModel
 import com.aybarsacar.cookpadversion2.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -46,11 +49,15 @@ class RecipesFragment : Fragment() {
   ): View? {
     mBinding = FragmentRecipesBinding.inflate(inflater, container, false)
 
+//    _binding.lifecycleOwner = this
+    _binding.mainViewModel = _mainViewModel
+
     // show the shimmer
     _binding.shimmerRecyclerView.showShimmer()
 
     setupRecyclerView()
-    requestApiData()
+
+    readDatabase()
 
     return _binding.root
   }
@@ -59,6 +66,28 @@ class RecipesFragment : Fragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     mBinding = null
+  }
+
+
+  /**
+   * reads the data in the local sqlite database of the device
+   */
+  private fun readDatabase() {
+
+    lifecycleScope.launch {
+
+      _mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, {
+        if (it.isNotEmpty()) {
+          _adapter.setData(it[0].result)
+          hideShimmerEffect()
+        } else {
+
+          // otherwise, request the data from the API
+          requestApiData()
+        }
+      })
+
+    }
   }
 
 
@@ -77,6 +106,10 @@ class RecipesFragment : Fragment() {
 
         is NetworkResult.Error -> {
           hideShimmerEffect()
+
+          // load the previous data from the cache
+          loadDataFromCache()
+
           Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
         }
 
@@ -86,6 +119,24 @@ class RecipesFragment : Fragment() {
       }
 
     })
+  }
+
+
+  /**
+   * only loads the data from cache
+   * used when there is no internet connection available on the device
+   */
+  private fun loadDataFromCache() {
+
+    lifecycleScope.launch {
+
+      _mainViewModel.readRecipes.observe(viewLifecycleOwner, {
+        if (it.isEmpty()) {
+          _adapter.setData(it[0].result)
+        }
+      })
+
+    }
   }
 
 

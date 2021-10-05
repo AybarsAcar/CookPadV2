@@ -1,4 +1,4 @@
-package com.aybarsacar.cookpadversion2
+package com.aybarsacar.cookpadversion2.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
