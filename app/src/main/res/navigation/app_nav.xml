@@ -9,10 +9,15 @@
         android:id="@+id/recipesFragment"
         android:name="com.aybarsacar.cookpadversion2.ui.fragments.recipes.RecipesFragment"
         android:label="Recipes"
-        tools:layout="@layout/fragment_recipes" >
+        tools:layout="@layout/fragment_recipes">
         <action
             android:id="@+id/action_recipesFragment_to_recipesBottomSheet"
             app:destination="@id/recipesBottomSheet" />
+
+        <argument
+            android:name="backFromBottomSheet"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/favouriteRecipesFragment"
@@ -28,9 +33,10 @@
         android:id="@+id/recipesBottomSheet"
         android:name="com.aybarsacar.cookpadversion2.ui.fragments.recipes.bottomsheet.RecipesBottomSheet"
         android:label="fragment_recipes_bottom_sheet"
-        tools:layout="@layout/fragment_recipes_bottom_sheet" >
+        tools:layout="@layout/fragment_recipes_bottom_sheet">
         <action
             android:id="@+id/action_recipesBottomSheet_to_recipesFragment"
             app:destination="@id/recipesFragment" />
+
     </dialog>
 </navigation>

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import com.aybarsacar.cookpadversion2.databinding.FragmentRecipesBottomSheetBinding
 import com.aybarsacar.cookpadversion2.utils.Constants
 import com.aybarsacar.cookpadversion2.viewmodels.RecipesViewModel
@@ -78,6 +79,9 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
     _binding.applyButton.setOnClickListener {
       // save the selected chips to our Data Store Preferences through the Recipes View Model
       _recipesViewModel.saveMealAndDietType(_mealTypeChip, _mealTypeChipId, _dietTypeChip, _dietTypeChipId)
+
+      val action = RecipesBottomSheetDirections.actionRecipesBottomSheetToRecipesFragment(backFromBottomSheet = true)
+      findNavController().navigate(action)
     }
 
     return _binding.root

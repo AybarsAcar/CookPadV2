@@ -1,6 +1,7 @@
 package com.aybarsacar.cookpadversion2.viewmodels
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.aybarsacar.cookpadversion2.BuildConfig
@@ -18,6 +19,8 @@ class RecipesViewModel @Inject constructor(
   application: Application,
   private val _dataStoreRepository: DataStoreRepository
 ) : AndroidViewModel(application) {
+
+  var networkStatus = false
 
   private var _mealType = Constants.DEFAULT_MEAL_TYPE
   private var _dietType = Constants.DEFAULT_DIET_TYPE
@@ -53,5 +56,11 @@ class RecipesViewModel @Inject constructor(
     return queries
   }
 
+
+  fun showNetworkStatus() {
+    if (!networkStatus) {
+      Toast.makeText(getApplication(), "No Internet Connection", Toast.LENGTH_SHORT).show()
+    }
+  }
 
 }

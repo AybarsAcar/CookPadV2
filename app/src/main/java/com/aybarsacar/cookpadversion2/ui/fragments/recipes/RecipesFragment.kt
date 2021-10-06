@@ -9,14 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aybarsacar.cookpadversion2.adapters.RecipesAdapter
 import com.aybarsacar.cookpadversion2.databinding.FragmentRecipesBinding
+import com.aybarsacar.cookpadversion2.utils.NetworkListener
 import com.aybarsacar.cookpadversion2.utils.NetworkResult
 import com.aybarsacar.cookpadversion2.utils.observeOnce
 import com.aybarsacar.cookpadversion2.viewmodels.MainViewModel
 import com.aybarsacar.cookpadversion2.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -30,9 +33,13 @@ class RecipesFragment : Fragment() {
   private lateinit var _mainViewModel: MainViewModel
   private lateinit var _recipesViewModel: RecipesViewModel
 
+  private lateinit var _networkListener: NetworkListener
+
   // This property is only valid between onCreateView and
   // onDestroyView.
   private val _binding get() = mBinding!!
+
+  private val _args by navArgs<RecipesFragmentArgs>()
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +62,14 @@ class RecipesFragment : Fragment() {
 
 
     _binding.recipeFilterFab.setOnClickListener {
-      findNavController().navigate(RecipesFragmentDirections.actionRecipesFragmentToRecipesBottomSheet())
+
+      if (_recipesViewModel.networkStatus) {
+        // only display the bottom sheet if internet is available
+        findNavController().navigate(RecipesFragmentDirections.actionRecipesFragmentToRecipesBottomSheet())
+      } else {
+        // otherwise toast no internet connection
+        _recipesViewModel.showNetworkStatus()
+      }
     }
 
     // show the shimmer
@@ -64,6 +78,14 @@ class RecipesFragment : Fragment() {
     setupRecyclerView()
 
     readDatabase()
+
+    lifecycleScope.launch {
+      _networkListener = NetworkListener()
+      _networkListener.checkNetworkAvailability(requireContext()).collect {
+        _recipesViewModel.networkStatus = it
+        _recipesViewModel.showNetworkStatus()
+      }
+    }
 
     return _binding.root
   }
@@ -83,7 +105,10 @@ class RecipesFragment : Fragment() {
     lifecycleScope.launch {
 
       _mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, {
-        if (it.isNotEmpty()) {
+
+        // if the local storage is not empty and we are not coming back from the bottom sheet
+        // we will use the data from the local device's Sqlite database
+        if (it.isNotEmpty() && !_args.backFromBottomSheet) {
           _adapter.setData(it[0].result)
           hideShimmerEffect()
         } else {
