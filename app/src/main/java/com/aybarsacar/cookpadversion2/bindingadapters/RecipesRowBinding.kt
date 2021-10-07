@@ -1,16 +1,39 @@
 package com.aybarsacar.cookpadversion2.bindingadapters
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.navigation.findNavController
 import coil.load
 import com.aybarsacar.cookpadversion2.R
+import com.aybarsacar.cookpadversion2.models.Recipe
+import com.aybarsacar.cookpadversion2.ui.fragments.recipes.RecipesFragmentDirections
 
 
 class RecipesRowBinding {
   companion object {
+
+
+    @BindingAdapter("onRecipeCLickListener")
+    @JvmStatic
+    fun onRecipeCLickListener(recipeRowLayout: ConstraintLayout, recipe: Recipe) {
+      recipeRowLayout.setOnClickListener {
+        try {
+
+          // pass in the recipe as a safe arg to the navigation
+          val action = RecipesFragmentDirections.actionRecipesFragmentToDetailsActivity(recipe)
+
+          recipeRowLayout.findNavController().navigate(action)
+        } catch (e: Exception) {
+          Log.d("onRecipeClickListener", e.toString())
+        }
+      }
+    }
+
 
     @BindingAdapter("setNumberOfLikes")
     @JvmStatic

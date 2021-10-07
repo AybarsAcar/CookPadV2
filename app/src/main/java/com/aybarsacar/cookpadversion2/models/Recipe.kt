@@ -1,11 +1,16 @@
 package com.aybarsacar.cookpadversion2.models
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
+
 
 /**
  * the actual recipe object
  */
+@Parcelize
 data class Recipe(
   @SerializedName("aggregateLikes")
   val aggregateLikes: Int,
@@ -14,7 +19,7 @@ data class Recipe(
   @SerializedName("dairyFree")
   val dairyFree: Boolean,
   @SerializedName("extendedIngredients")
-  val extendedIngredients: List<ExtendedIngredient>,
+  val extendedIngredients: @RawValue List<ExtendedIngredient>,
   @SerializedName("glutenFree")
   val glutenFree: Boolean,
   @SerializedName("id")
@@ -37,4 +42,4 @@ data class Recipe(
   val vegetarian: Boolean,
   @SerializedName("veryHealthy")
   val veryHealthy: Boolean,
-)
+) : Parcelable

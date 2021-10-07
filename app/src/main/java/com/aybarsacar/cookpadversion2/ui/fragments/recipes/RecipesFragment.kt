@@ -2,8 +2,8 @@ package com.aybarsacar.cookpadversion2.ui.fragments.recipes
 
 import android.os.Bundle
 import android.view.*
-import android.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -158,6 +158,41 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
   }
 
 
+  private fun searchApiData(searchQuery: String) {
+    displayShimmerEffect()
+
+    _mainViewModel.searchRecipes(_recipesViewModel.applySearchQueries(searchQuery))
+
+    _mainViewModel.searchRecipesResponse.observe(viewLifecycleOwner, { response ->
+
+      when (response) {
+        is NetworkResult.Success -> {
+          hideShimmerEffect()
+
+          val result = response.data
+          result?.let {
+            _adapter.setData(it)
+          }
+        }
+
+        is NetworkResult.Error -> {
+          hideShimmerEffect()
+
+          // load the previous data from the cache
+          loadDataFromCache()
+
+          Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
+        }
+
+        is NetworkResult.Loading -> {
+          displayShimmerEffect()
+        }
+      }
+
+    })
+  }
+
+
   /**
    * only loads the data from cache
    * used when there is no internet connection available on the device
@@ -195,11 +230,23 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
   }
 
 
-  override fun onQueryTextSubmit(p0: String?): Boolean {
+  /**
+   * called whenever we hit submit to search
+   */
+  override fun onQueryTextSubmit(query: String?): Boolean {
+
+    if (query != null) {
+      // search for the API data
+      searchApiData(query)
+    }
+
     return true
   }
 
 
+  /**
+   * called whenever the text is changed in the search widget
+   */
   override fun onQueryTextChange(p0: String?): Boolean {
     return true
   }
