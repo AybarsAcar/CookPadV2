@@ -1,9 +1,8 @@
 package com.aybarsacar.cookpadversion2.ui.fragments.recipes
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aybarsacar.cookpadversion2.R
 import com.aybarsacar.cookpadversion2.adapters.RecipesAdapter
 import com.aybarsacar.cookpadversion2.databinding.FragmentRecipesBinding
 import com.aybarsacar.cookpadversion2.utils.NetworkListener
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class RecipesFragment : Fragment() {
+class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
   private var mBinding: FragmentRecipesBinding? = null
 
@@ -57,7 +57,6 @@ class RecipesFragment : Fragment() {
   ): View? {
     mBinding = FragmentRecipesBinding.inflate(inflater, container, false)
 
-//    _binding.lifecycleOwner = this
     _binding.mainViewModel = _mainViewModel
 
 
@@ -75,15 +74,21 @@ class RecipesFragment : Fragment() {
     // show the shimmer
     _binding.shimmerRecyclerView.showShimmer()
 
+    setHasOptionsMenu(true)
+
     setupRecyclerView()
 
-    readDatabase()
+    _recipesViewModel.readBackOnline.observe(viewLifecycleOwner, {
+      _recipesViewModel.backOnline = it
+    })
 
     lifecycleScope.launch {
       _networkListener = NetworkListener()
       _networkListener.checkNetworkAvailability(requireContext()).collect {
         _recipesViewModel.networkStatus = it
         _recipesViewModel.showNetworkStatus()
+
+        readDatabase()
       }
     }
 
@@ -176,6 +181,27 @@ class RecipesFragment : Fragment() {
     _binding.shimmerRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
     displayShimmerEffect()
+  }
+
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.recipes_menu, menu)
+
+    val search = menu.findItem(R.id.menu_search)
+    val searchView = search.actionView as? SearchView
+
+    searchView?.isSubmitButtonEnabled = true
+    searchView?.setOnQueryTextListener(this)
+  }
+
+
+  override fun onQueryTextSubmit(p0: String?): Boolean {
+    return true
+  }
+
+
+  override fun onQueryTextChange(p0: String?): Boolean {
+    return true
   }
 
 

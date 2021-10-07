@@ -3,6 +3,7 @@ package com.aybarsacar.cookpadversion2.viewmodels
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.aybarsacar.cookpadversion2.BuildConfig
 import com.aybarsacar.cookpadversion2.data.DataStoreRepository
@@ -21,6 +22,7 @@ class RecipesViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
   var networkStatus = false
+  var backOnline = false
 
   private var _mealType = Constants.DEFAULT_MEAL_TYPE
   private var _dietType = Constants.DEFAULT_DIET_TYPE
@@ -28,9 +30,18 @@ class RecipesViewModel @Inject constructor(
 
   val readMealAndDietType = _dataStoreRepository.readMealAndDietType
 
+  val readBackOnline = _dataStoreRepository.readBackOnline.asLiveData()
+
   fun saveMealAndDietType(mealType: String, mealTypeId: Int, dietType: String, dietTypeId: Int) {
     viewModelScope.launch(Dispatchers.IO) {
       _dataStoreRepository.saveMealAndDietType(mealType, mealTypeId, dietType, dietTypeId)
+    }
+  }
+
+
+  fun saveBackOnline(backOnline: Boolean) {
+    viewModelScope.launch(Dispatchers.IO) {
+      _dataStoreRepository.saveBackOnline(backOnline)
     }
   }
 
@@ -60,6 +71,15 @@ class RecipesViewModel @Inject constructor(
   fun showNetworkStatus() {
     if (!networkStatus) {
       Toast.makeText(getApplication(), "No Internet Connection", Toast.LENGTH_SHORT).show()
+
+      // when we lose the internet connection we set this to true
+      saveBackOnline(true)
+    } else if (networkStatus) {
+      if (backOnline) {
+        Toast.makeText(getApplication(), "You're back online!", Toast.LENGTH_SHORT).show()
+
+        saveBackOnline(false)
+      }
     }
   }
 

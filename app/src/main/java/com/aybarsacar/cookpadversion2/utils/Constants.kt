@@ -30,6 +30,8 @@ class Constants {
     const val PREFERENCES_DIET_TYPE_ID = "dietTypeId"
 
     const val PREFERENCES_NAME = "cook_pad_preferences"
+
+    const val PREFERENCES_BACK_ONLINE: String = "backOnline"
   }
 
 }
