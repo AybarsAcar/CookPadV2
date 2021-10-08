@@ -1,13 +1,13 @@
 package com.aybarsacar.cookpadversion2.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.aybarsacar.cookpadversion2.models.Recipe
 
 
 /**
  * used so when the data changes the whole list is not updated
+ * currently used in Ingredients and Recipe Type
  */
-class RecipesDiffUtil(private val _oldList: List<Recipe>, private val _newList: List<Recipe>) : DiffUtil.Callback() {
+class RecipesDiffUtil<T>(private val _oldList: List<T>, private val _newList: List<T>) : DiffUtil.Callback() {
 
   override fun getOldListSize(): Int {
     return _oldList.size

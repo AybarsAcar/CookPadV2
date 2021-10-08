@@ -10,6 +10,7 @@ import coil.load
 import com.aybarsacar.cookpadversion2.R
 import com.aybarsacar.cookpadversion2.databinding.FragmentOverviewBinding
 import com.aybarsacar.cookpadversion2.models.Recipe
+import com.aybarsacar.cookpadversion2.utils.Constants
 import org.jsoup.Jsoup
 
 
@@ -30,7 +31,7 @@ class OverviewFragment : Fragment() {
     mBinding = FragmentOverviewBinding.inflate(inflater, container, false)
 
     val args = arguments
-    val currentRecipe: Recipe? = args?.getParcelable("recipeBundle")
+    val currentRecipe: Recipe? = args?.getParcelable(Constants.RECIPE_RESULT_KEY)
 
     currentRecipe?.let {
       _binding.mainImageView.load(it.image)

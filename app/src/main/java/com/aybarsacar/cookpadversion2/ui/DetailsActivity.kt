@@ -7,11 +7,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
 import com.aybarsacar.cookpadversion2.R
+import com.aybarsacar.cookpadversion2.adapters.PagerAdapter
 import com.aybarsacar.cookpadversion2.databinding.ActivityDetailsBinding
-import com.aybarsacar.cookpadversion2.ui.fragments.PagerAdapter
 import com.aybarsacar.cookpadversion2.ui.fragments.ingredients.IngredientsFragment
 import com.aybarsacar.cookpadversion2.ui.fragments.instructions.InstructionsFragment
 import com.aybarsacar.cookpadversion2.ui.fragments.overview.OverviewFragment
+import com.aybarsacar.cookpadversion2.utils.Constants
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -36,7 +37,7 @@ class DetailsActivity : AppCompatActivity() {
     val titles = arrayListOf<String>("Overview", "Ingredients", "Instructions")
 
     val resultBundle = Bundle()
-    resultBundle.putParcelable("recipeBundle", args.recipe)
+    resultBundle.putParcelable(Constants.RECIPE_RESULT_KEY, args.recipe)
 
     val adapter = PagerAdapter(resultBundle, fragments, titles, supportFragmentManager)
     _binding.viewPager.adapter = adapter

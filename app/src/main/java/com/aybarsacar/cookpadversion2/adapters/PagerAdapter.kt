@@ -1,4 +1,4 @@
-package com.aybarsacar.cookpadversion2.ui.fragments
+package com.aybarsacar.cookpadversion2.adapters
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
