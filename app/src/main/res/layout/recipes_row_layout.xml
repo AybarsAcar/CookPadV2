@@ -70,12 +70,12 @@
 
                 <TextView
                     android:id="@+id/descriptionTextView"
+                    parseHtml="@{recipe.summary}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:text="@{recipe.summary}"
                     android:textColor="@color/darkGray"
                     app:layout_constraintEnd_toEndOf="@+id/titleTextView"
                     app:layout_constraintStart_toStartOf="@+id/titleTextView"

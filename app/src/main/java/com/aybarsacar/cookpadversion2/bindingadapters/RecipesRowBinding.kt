@@ -12,6 +12,7 @@ import coil.load
 import com.aybarsacar.cookpadversion2.R
 import com.aybarsacar.cookpadversion2.models.Recipe
 import com.aybarsacar.cookpadversion2.ui.fragments.recipes.RecipesFragmentDirections
+import org.jsoup.Jsoup
 
 
 class RecipesRowBinding {
@@ -86,5 +87,15 @@ class RecipesRowBinding {
 
     }
 
+
+    @BindingAdapter("parseHtml")
+    @JvmStatic
+    fun parseHtml(textView: TextView, text: String?) {
+
+      text?.let {
+        val parsedText = Jsoup.parse(it).text()
+        textView.text = parsedText
+      }
+    }
   }
 }

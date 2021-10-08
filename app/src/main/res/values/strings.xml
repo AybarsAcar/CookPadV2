@@ -38,4 +38,8 @@
     <string name="apply">Apply</string>
     <string name="recipe_filter_floatin_action_button">Recipe Filter Floatin Action Button</string>
     <string name="search">Search</string>
+    <string name="main_recipe_image">Main Recipe Image</string>
+    <string name="dairy_free">Dairy Free</string>
+    <string name="healthy">Healthy</string>
+    <string name="cheap">Cheap</string>
 </resources>
