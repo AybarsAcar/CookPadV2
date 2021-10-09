@@ -2,7 +2,7 @@ package com.aybarsacar.cookpadversion2.bindingadapters
 
 import android.view.View
 import androidx.databinding.BindingAdapter
-import com.aybarsacar.cookpadversion2.data.database.RecipesEntity
+import com.aybarsacar.cookpadversion2.data.database.entities.RecipesEntity
 import com.aybarsacar.cookpadversion2.models.Result
 import com.aybarsacar.cookpadversion2.utils.NetworkResult
 

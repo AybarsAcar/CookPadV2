@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/gradient_overlay.xml" value="0.44814814814814813" />
+        <entry key="app/src/main/res/drawable/ic_menu_book.xml" value="0.5380208333333333" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_favourite_recipes.xml" value="0.521875" />
         <entry key="app/src/main/res/layout/fragment_food_joke.xml" value="0.521875" />
         <entry key="app/src/main/res/layout/fragment_ingredients.xml" value="0.521875" />
+        <entry key="app/src/main/res/layout/fragment_instructions.xml" value="0.29791666666666666" />
         <entry key="app/src/main/res/layout/fragment_overview.xml" value="0.521875" />
         <entry key="app/src/main/res/layout/fragment_recipes.xml" value="0.30434782608695654" />
         <entry key="app/src/main/res/layout/fragment_recipes_bottom_sheet.xml" value="0.38443017656500805" />
@@ -16,6 +18,7 @@
         <entry key="app/src/main/res/layout/placeholder_row_layout.xml" value="0.75" />
         <entry key="app/src/main/res/layout/recipes_row_layout.xml" value="0.35507783543365457" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/details_menu.xml" value="0.309375" />
         <entry key="app/src/main/res/menu/recipes_menu.xml" value="0.521875" />
       </map>
     </option>

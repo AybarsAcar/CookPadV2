@@ -6,7 +6,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.*
 import com.aybarsacar.cookpadversion2.data.Repository
-import com.aybarsacar.cookpadversion2.data.database.RecipesEntity
+import com.aybarsacar.cookpadversion2.data.database.entities.FavouriteRecipeEntity
+import com.aybarsacar.cookpadversion2.data.database.entities.RecipesEntity
 import com.aybarsacar.cookpadversion2.models.Result
 import com.aybarsacar.cookpadversion2.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,29 @@ class MainViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
   // Room Database
-  var readRecipes: LiveData<List<RecipesEntity>> = _repository.localDataSource.readDatabase().asLiveData()
+  var readRecipes: LiveData<List<RecipesEntity>> = _repository.localDataSource.readRecipes().asLiveData()
+
+  val readFavouriteRecipes: LiveData<List<FavouriteRecipeEntity>> =
+    _repository.localDataSource.readFavouriteRecipes().asLiveData()
+
+
+  fun insertFavouriteRecipe(favouriteRecipeEntity: FavouriteRecipeEntity) =
+    viewModelScope.launch(Dispatchers.IO) {
+      _repository.localDataSource.insertFavouriteRecipe(favouriteRecipeEntity)
+    }
+
+
+  fun deleteFavouriteRecipe(favouriteRecipeEntity: FavouriteRecipeEntity) =
+    viewModelScope.launch(Dispatchers.IO) {
+      _repository.localDataSource.deleteFavouriteRecipe(favouriteRecipeEntity)
+    }
+
+
+  fun deleteAllFavouriteRecipes() =
+    viewModelScope.launch(Dispatchers.IO) {
+      _repository.localDataSource.deleteAllFavouriteRecipes()
+    }
+
 
   /**
    * used to cache the recipes in the local sqlite database

@@ -1,4 +1,4 @@
-package com.aybarsacar.cookpadversion2.data.database
+package com.aybarsacar.cookpadversion2.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
