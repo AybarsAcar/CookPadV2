@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
 
     _binding = ActivityMainBinding.inflate(layoutInflater)
 
+    // set the theme back to normal theme
+    setTheme(R.style.AppTheme)
+
     setContentView(_binding.root)
 
     val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)

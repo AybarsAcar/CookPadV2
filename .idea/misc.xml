@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-xxhdpi/ic_food_joke_background_dark.xml" value="0.44814814814814813" />
         <entry key="app/src/main/res/drawable/gradient_overlay.xml" value="0.44814814814814813" />
         <entry key="app/src/main/res/drawable/ic_menu_book.xml" value="0.5380208333333333" />
         <entry key="app/src/main/res/drawable/ic_splash_screen_light.xml" value="0.44814814814814813" />
+        <entry key="app/src/main/res/layout-night/fragment_food_joke.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/favourite_recipe_row_layout.xml" value="0.29846014492753625" />
