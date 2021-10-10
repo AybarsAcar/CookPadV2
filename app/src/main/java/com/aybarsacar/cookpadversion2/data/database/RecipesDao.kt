@@ -2,6 +2,7 @@ package com.aybarsacar.cookpadversion2.data.database
 
 import androidx.room.*
 import com.aybarsacar.cookpadversion2.data.database.entities.FavouriteRecipeEntity
+import com.aybarsacar.cookpadversion2.data.database.entities.FoodJokeEntity
 import com.aybarsacar.cookpadversion2.data.database.entities.RecipesEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -31,4 +32,11 @@ interface RecipesDao {
 
   @Query("delete from favourite_recipes_table")
   suspend fun deleteAllFavouriteRecipes()
+
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insertFoodJoke(foodJokeEntity: FoodJokeEntity)
+
+  @Query("select * from food_joke_table order by id asc")
+  fun getFoodJoke(): Flow<List<FoodJokeEntity>>
 }

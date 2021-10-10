@@ -7,7 +7,9 @@ import android.net.NetworkCapabilities
 import androidx.lifecycle.*
 import com.aybarsacar.cookpadversion2.data.Repository
 import com.aybarsacar.cookpadversion2.data.database.entities.FavouriteRecipeEntity
+import com.aybarsacar.cookpadversion2.data.database.entities.FoodJokeEntity
 import com.aybarsacar.cookpadversion2.data.database.entities.RecipesEntity
+import com.aybarsacar.cookpadversion2.models.FoodJoke
 import com.aybarsacar.cookpadversion2.models.Result
 import com.aybarsacar.cookpadversion2.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +30,13 @@ class MainViewModel @Inject constructor(
 
   val readFavouriteRecipes: LiveData<List<FavouriteRecipeEntity>> =
     _repository.localDataSource.readFavouriteRecipes().asLiveData()
+
+  val readFoodJoke: LiveData<List<FoodJokeEntity>> = _repository.localDataSource.getFoodJoke().asLiveData()
+
+
+  fun insertFoodJoke(foodJokeEntity: FoodJokeEntity) = viewModelScope.launch(Dispatchers.IO) {
+    _repository.localDataSource.insertFoodJoke(foodJokeEntity)
+  }
 
 
   fun insertFavouriteRecipe(favouriteRecipeEntity: FavouriteRecipeEntity) =
@@ -59,6 +68,7 @@ class MainViewModel @Inject constructor(
   // Retrofit
   var recipesResponse: MutableLiveData<NetworkResult<Result>> = MutableLiveData()
   var searchRecipesResponse: MutableLiveData<NetworkResult<Result>> = MutableLiveData()
+  var foodJokeResponse: MutableLiveData<NetworkResult<FoodJoke>> = MutableLiveData()
 
 
   /**
@@ -66,6 +76,11 @@ class MainViewModel @Inject constructor(
    */
   fun getRecipes(queries: Map<String, String>) = viewModelScope.launch {
     getRecipesSafeCall(queries)
+  }
+
+
+  fun getFoodJoke(apiKey: String) = viewModelScope.launch {
+    getFoodJokeSafeCall(apiKey)
   }
 
 
@@ -132,6 +147,38 @@ class MainViewModel @Inject constructor(
   }
 
 
+  private suspend fun getFoodJokeSafeCall(apiKey: String) {
+
+    foodJokeResponse.value = NetworkResult.Loading()
+
+    if (hasInternetConnection()) {
+
+      try {
+
+        val response = _repository.remoteDataSource.getFoodJoke(apiKey)
+
+        // store the response in our live data
+        foodJokeResponse.value = handleFoodJokeResponse(response)
+
+        val foodJoke = foodJokeResponse.value!!.data
+
+        foodJoke?.let {
+          offlineCacheFoodJoke(it)
+        }
+
+      } catch (e: Exception) {
+
+        foodJokeResponse.value = NetworkResult.Error("Recipes not found")
+
+      }
+
+    } else {
+      foodJokeResponse.value = NetworkResult.Error("No Internet Connection")
+    }
+
+  }
+
+
   /**
    * Caches the result we get from the API
    */
@@ -140,7 +187,17 @@ class MainViewModel @Inject constructor(
     val recipesEntity = RecipesEntity(foodRecipe)
 
     insertRecipes(recipesEntity)
+  }
 
+
+  /**
+   * Caches the result we get from the API
+   */
+  private fun offlineCacheFoodJoke(foodJoke: FoodJoke) {
+
+    val foodJokeEntity = FoodJokeEntity(foodJoke)
+
+    insertFoodJoke(foodJokeEntity)
   }
 
 
@@ -162,6 +219,27 @@ class MainViewModel @Inject constructor(
       response.isSuccessful -> {
         val recipes = response.body()
         return NetworkResult.Success(recipes!!)
+      }
+
+      else -> return NetworkResult.Error(response.message())
+    }
+  }
+
+
+  private fun handleFoodJokeResponse(response: Response<FoodJoke>): NetworkResult<FoodJoke>? {
+    when {
+      // these are the messages we get from the API
+      response.message().toString().contains("timeout") -> {
+        return NetworkResult.Error("Timeout")
+      }
+
+      response.code() == 402 -> {
+        return NetworkResult.Error("API Key Limited")
+      }
+
+      response.isSuccessful -> {
+        val foodJoke = response.body()
+        return NetworkResult.Success(foodJoke!!)
       }
 
       else -> return NetworkResult.Error(response.message())

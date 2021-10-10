@@ -47,4 +47,6 @@
     <string name="no_data_image">No Data Image</string>
     <string name="delete_favourite_menu">Delete Favourite Menu</string>
     <string name="delete_all">Delete All</string>
+    <string name="error">Error</string>
+    <string name="share">Share</string>
 </resources>

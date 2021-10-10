@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/gradient_overlay.xml" value="0.44814814814814813" />
         <entry key="app/src/main/res/drawable/ic_menu_book.xml" value="0.5380208333333333" />
+        <entry key="app/src/main/res/drawable/ic_splash_screen_light.xml" value="0.44814814814814813" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.29846014492753625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/favourite_recipe_row_layout.xml" value="0.29846014492753625" />
@@ -22,6 +23,7 @@
         <entry key="app/src/main/res/menu/details_menu.xml" value="0.309375" />
         <entry key="app/src/main/res/menu/favourite_recipes_menu.xml" value="0.521875" />
         <entry key="app/src/main/res/menu/favourites_contextual_menu.xml" value="0.521875" />
+        <entry key="app/src/main/res/menu/food_joke_menu.xml" value="0.521875" />
         <entry key="app/src/main/res/menu/recipes_menu.xml" value="0.521875" />
       </map>
     </option>

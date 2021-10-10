@@ -2,6 +2,7 @@ package com.aybarsacar.cookpadversion2.data
 
 import com.aybarsacar.cookpadversion2.data.database.RecipesDao
 import com.aybarsacar.cookpadversion2.data.database.entities.FavouriteRecipeEntity
+import com.aybarsacar.cookpadversion2.data.database.entities.FoodJokeEntity
 import com.aybarsacar.cookpadversion2.data.database.entities.RecipesEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -36,5 +37,15 @@ class LocalDataSource @Inject constructor(private val _recipesDao: RecipesDao) {
 
   suspend fun deleteAllFavouriteRecipes() {
     _recipesDao.deleteAllFavouriteRecipes()
+  }
+
+
+  fun getFoodJoke(): Flow<List<FoodJokeEntity>> {
+    return _recipesDao.getFoodJoke()
+  }
+
+
+  suspend fun insertFoodJoke(foodJokeEntity: FoodJokeEntity) {
+    _recipesDao.insertFoodJoke(foodJokeEntity)
   }
 }
